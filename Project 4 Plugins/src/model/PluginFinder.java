@@ -49,13 +49,15 @@ public class PluginFinder extends Observable implements ActionListener {
 		List<File> newPlugins = getAllFiles();
 		
 		if(!(newPlugins.equals(this.plugins))) {
-			notify(newPlugins);
+			this.plugins = newPlugins;
+			notify(plugins);
 		}
 		
 	}
 	
 	public void notify(List<File> files) {
 		//TODO : notify the view
+		sendMessageToObservers("Modifications in plugins folder !");
 		for(File file : files) {
 			sendMessageToObservers("Added new plugin " + file);
 		}
