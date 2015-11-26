@@ -1,6 +1,6 @@
 package view;
 
-import model.PluginFinder;
+import model.pluginfinder.PluginFinder;
 
 public class Main {
 

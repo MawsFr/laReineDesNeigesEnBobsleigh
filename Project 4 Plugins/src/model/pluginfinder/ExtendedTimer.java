@@ -1,4 +1,4 @@
-package model;
+package model.pluginfinder;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
