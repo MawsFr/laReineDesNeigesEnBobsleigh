@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Observable;
 
-public class PluginFinder implements ActionListener {
+public class PluginFinder extends Observable implements ActionListener {
 	
 	protected ExtendedTimer timer;
 	protected List<File> plugins;
@@ -20,11 +20,13 @@ public class PluginFinder implements ActionListener {
 		this.pluginFilter = new PluginFilter();
 		timer = new ExtendedTimer(this);
 		this.plugins = new ArrayList<File>();
+		timer.start();
 		
 	}
 	
 	public List<File> getAllFiles() {
 		File dir = new File(pluginDirectory);
+		System.out.println(dir.getAbsolutePath());
 		File[] files = dir.listFiles(pluginFilter);
 		
 		if(files == null || files.length == 0) {
@@ -45,6 +47,15 @@ public class PluginFinder implements ActionListener {
 	
 	public void notify(List<File> files) {
 		//TODO : notify the view
+
+		for(File file : files) {
+			sendMessageToObservers("Added new plugin " + file);
+		}
+	}
+	
+	public void sendMessageToObservers(String message) {
+		setChanged();
+		notifyObservers(message);
 	}
 
 }
