@@ -84,7 +84,9 @@ public class PluginFinder extends Observable<List<Plugin>> implements ActionList
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-		
+		if(!theClass.isAssignableFrom(Plugin.class)) {
+			throw new ClassCastException(theClass.getName() + " doesn't extend Plugin !");
+		}
 		try {
 			theInstance = (Plugin) theClass.newInstance();
 		} catch (InstantiationException | IllegalAccessException e) {
