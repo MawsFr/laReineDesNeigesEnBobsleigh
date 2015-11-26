@@ -47,7 +47,6 @@ public class PluginFinder extends Observable implements ActionListener {
 	
 	public void notify(List<File> files) {
 		//TODO : notify the view
-
 		for(File file : files) {
 			sendMessageToObservers("Added new plugin " + file);
 		}
