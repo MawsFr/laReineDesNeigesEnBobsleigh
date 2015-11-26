@@ -15,9 +15,10 @@ public class PluginFilter implements FilenameFilter{
 		Class<?> theClass;
 		
 		try {
-			theClass = Class.forName(name.replaceFirst("\\.class",""));
+			theClass = Class.forName(PluginFinder.DEFAULT_PLUGINS_PATH + "." + name.replaceFirst("\\.class",""));
 			return true;
 		} catch (ClassNotFoundException e) {
+			e.printStackTrace(); //TODO : Enlever a la fin
 			return false;
 		}	
 	}

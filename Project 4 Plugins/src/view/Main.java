@@ -8,8 +8,7 @@ public class Main {
 		PluginAddedLogger console = new PluginAddedLogger();
 		PluginFinder pluginFinder = new PluginFinder("plugins");
 		pluginFinder.addObserver(console);
-		
-		
+		pluginFinder.start();
 	}
 
 }

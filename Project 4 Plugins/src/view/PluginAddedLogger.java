@@ -15,4 +15,5 @@ public class PluginAddedLogger implements Observer {
 			System.out.println(message);	
 		}
 	}
+	
 }

@@ -10,6 +10,8 @@ import java.util.Observable;
 
 public class PluginFinder extends Observable implements ActionListener {
 	
+	public static final String DEFAULT_PLUGINS_PATH = "plugins";
+	
 	protected ExtendedTimer timer;
 	protected List<File> plugins;
 	protected PluginFilter pluginFilter;
@@ -20,13 +22,19 @@ public class PluginFinder extends Observable implements ActionListener {
 		this.pluginFilter = new PluginFilter();
 		timer = new ExtendedTimer(this);
 		this.plugins = new ArrayList<File>();
-		timer.start();
 		
+	}
+	
+	public PluginFinder() {
+		this(DEFAULT_PLUGINS_PATH);
+	}
+	
+	public void start() {
+		timer.start();
 	}
 	
 	public List<File> getAllFiles() {
 		File dir = new File(pluginDirectory);
-		System.out.println(dir.getAbsolutePath());
 		File[] files = dir.listFiles(pluginFilter);
 		
 		if(files == null || files.length == 0) {
@@ -39,6 +47,7 @@ public class PluginFinder extends Observable implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		List<File> newPlugins = getAllFiles();
+		
 		if(!(newPlugins.equals(this.plugins))) {
 			notify(newPlugins);
 		}
