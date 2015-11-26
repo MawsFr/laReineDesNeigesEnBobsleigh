@@ -9,7 +9,7 @@ public class KeepOnlyNumbersPlugin implements Plugin{
 	
 	@Override
 	public String transform(String s) {
-		return s.replaceAll("[^\\d.]", "");
+		return s.replaceAll("[^0-9.]", "");
 	}
 	
 }
