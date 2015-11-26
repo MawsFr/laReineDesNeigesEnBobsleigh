@@ -1,3 +1,7 @@
+/**
+ * @author Margot
+ */
+
 package plugins;
 
 public class DeleteVowelsPlugin implements Plugin {
