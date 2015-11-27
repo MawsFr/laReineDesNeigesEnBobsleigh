@@ -1,18 +1,23 @@
 package view;
 
-import java.util.Observable;
-import java.util.Observer;
+import java.util.List;
 
-public class PluginAddedLogger implements Observer {
+import plugins.Plugin;
+import model.observer.Observer;
 
-	@Override
-	public void update(Observable o, Object arg) {
-		printMessage((String) arg); 
-	}
-	
+public class PluginAddedLogger implements Observer<List<Plugin>> {
+
 	public void printMessage(String message) {
 		if(!message.isEmpty()) {
 			System.out.println(message);	
 		}
 	}
+
+	@Override
+	public void update(List<Plugin> pluginsFinded) {
+		printMessage("Modifications in plugins folder !");
+		for(Plugin plugin : pluginsFinded){
+			printMessage("Added " + plugin.getLabel());
+		}
+	}	
 }

@@ -1,4 +1,4 @@
-package model;
+package model.pluginfinder;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -6,9 +6,14 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Observable;
 
-public class PluginFinder extends Observable implements ActionListener {
+import plugins.Plugin;
+import model.observer.Observable;
+
+public class PluginFinder extends Observable<List<Plugin>> implements ActionListener {
+	
+	public static final String DEFAULT_PLUGINS_PATH = "./plugins";
+	public static final String PLUGINS_PACKAGE = Plugin.class.getPackage().getName();
 	
 	protected ExtendedTimer timer;
 	protected List<File> plugins;
@@ -20,13 +25,24 @@ public class PluginFinder extends Observable implements ActionListener {
 		this.pluginFilter = new PluginFilter();
 		timer = new ExtendedTimer(this);
 		this.plugins = new ArrayList<File>();
-		timer.start();
+		System.out.println(PLUGINS_PACKAGE);
 		
+	}
+	
+	public PluginFinder() {
+		this(DEFAULT_PLUGINS_PATH);
+	}
+	
+	public void start() {
+		timer.start();
+	}
+	
+	public void stop() {
+		timer.stop();
 	}
 	
 	public List<File> getAllFiles() {
 		File dir = new File(pluginDirectory);
-		System.out.println(dir.getAbsolutePath());
 		File[] files = dir.listFiles(pluginFilter);
 		
 		if(files == null || files.length == 0) {
@@ -39,22 +55,20 @@ public class PluginFinder extends Observable implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		List<File> newPlugins = getAllFiles();
+		
 		if(!(newPlugins.equals(this.plugins))) {
-			notify(newPlugins);
+			this.plugins = newPlugins;
+			notify(plugins);
 		}
 		
 	}
 	
+	
+	
 	public void notify(List<File> files) {
 		//TODO : notify the view
-		for(File file : files) {
-			sendMessageToObservers("Added new plugin " + file);
-		}
-	}
-	
-	public void sendMessageToObservers(String message) {
-		setChanged();
-		notifyObservers(message);
+		List<Plugin> pluginsFinded = pluginFilter.filesToPlugins(files);
+		notifyObservers(pluginsFinded);
 	}
 
 }
