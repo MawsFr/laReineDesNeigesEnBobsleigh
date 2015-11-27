@@ -17,8 +17,8 @@ public class PluginMenuItem extends JMenuItem implements ActionListener {
 	protected Plugin plugin;
 	
 	public PluginMenuItem(Plugin plugin) {
+		super(plugin.getLabel());
 		this.plugin = plugin;
-		this.setName(plugin.getLabel());
 		this.addActionListener(this);
 	}
 

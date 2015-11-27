@@ -28,8 +28,8 @@ public class MainFrame extends JFrame implements Observer<List<Plugin>>{
 		c.setLayout(new BorderLayout());
 		
 		this.menuBar = new MenuBar();
-		
 		this.setJMenuBar(menuBar);
+		
 		this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		this.setSize(getPreferredSize());
 		this.setTitle("Plugin's project");
