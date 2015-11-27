@@ -24,7 +24,9 @@ public class PluginMenuItem extends JMenuItem implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		System.out.println(plugin.transform("Bonjour 783K QSDJLK"));
+		String text = MainFrame.getInstance().getEditor().getText();
+		String transformedText = plugin.transform(text);
+		MainFrame.getInstance().getEditor().setText(transformedText);
 	}
 	
 }
