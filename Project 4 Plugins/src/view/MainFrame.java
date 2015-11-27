@@ -47,6 +47,10 @@ public class MainFrame extends JFrame implements Observer<List<Plugin>>{
 		
 	}
 	
+	public JTextPane getEditor() {
+		return editor;
+	}
+	
 	public PluginFinder getPluginFinder() {
 		return pluginFinder;
 	}
