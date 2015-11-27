@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.util.List;
 
 import javax.swing.JFrame;
+import javax.swing.JTextPane;
 
 import model.observer.Observer;
 import model.pluginfinder.PluginFinder;
@@ -20,7 +21,7 @@ public class MainFrame extends JFrame implements Observer<List<Plugin>>{
 	public static final int HEIGHT = 680;
 	protected PluginFinder pluginFinder;
 	protected MenuBar menuBar;
-	
+	protected JTextPane editor;
 	protected Container c;
 	
 	private MainFrame(){
@@ -32,6 +33,9 @@ public class MainFrame extends JFrame implements Observer<List<Plugin>>{
 		
 		this.menuBar = new MenuBar();
 		this.setJMenuBar(menuBar);
+		
+		this.editor = new JTextPane();
+		c.add(editor,BorderLayout.CENTER);
 		
 		this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		this.setSize(getPreferredSize());
