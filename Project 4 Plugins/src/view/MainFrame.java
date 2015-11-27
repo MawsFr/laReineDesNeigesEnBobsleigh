@@ -35,8 +35,6 @@ public class MainFrame extends JFrame implements Observer<List<Plugin>>{
 		this.setTitle("Plugin's project");
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setResizable(true);
-		
 		
 		this.setVisible(true);
 		
@@ -52,8 +50,11 @@ public class MainFrame extends JFrame implements Observer<List<Plugin>>{
 	@Override
 	public void update(List<Plugin> newPlugins) {
 		menuBar.removePluginsMenu();
+		System.out.println("Modifications in plugins folder !");
 		for(Plugin plugin: newPlugins){
 			menuBar.createMenu(plugin);
+			System.out.println("Added " + plugin.getLabel());
 		}
+		
 	}
 }

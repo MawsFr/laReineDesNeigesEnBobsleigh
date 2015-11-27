@@ -26,7 +26,11 @@ public class MenuBar extends JMenuBar{
 	}
 	
 	public void createMenu(Plugin plugin){
-		this.menuTools.add(new JMenuItem(plugin.getLabel()));	
+		PluginMenuItem item = new PluginMenuItem(plugin);
+		this.menuTools.add(item);
+		menuTools.repaint();
+		menuTools.revalidate();
+		
 	}	
 	
 	public void removePluginsMenu(){
