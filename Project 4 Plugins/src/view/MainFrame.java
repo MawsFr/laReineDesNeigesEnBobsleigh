@@ -13,16 +13,19 @@ import plugins.Plugin;
 
 public class MainFrame extends JFrame implements Observer<List<Plugin>>{
 
+	public static MainFrame instance;
+	
 	private static final long serialVersionUID = -2901605648414032427L;
 	public static final int WIDTH = 480;
 	public static final int HEIGHT = 680;
 	protected PluginFinder pluginFinder;
 	protected MenuBar menuBar;
+	
 	protected Container c;
 	
-	public MainFrame(PluginFinder pluginFinder){
+	private MainFrame(){
 		
-		this.pluginFinder = pluginFinder;
+		this.pluginFinder = new PluginFinder("./plugins");
 		pluginFinder.addObserver(this);
 		c = getContentPane();
 		c.setLayout(new BorderLayout());
@@ -40,11 +43,21 @@ public class MainFrame extends JFrame implements Observer<List<Plugin>>{
 		
 	}
 	
-	public static void main(String[] args) {
-		PluginFinder pluginFinder = new PluginFinder("./plugins");
+	public PluginFinder getPluginFinder() {
+		return pluginFinder;
+	}
+	
+	public static MainFrame getInstance() {
+		if(instance == null) {
+			instance = new MainFrame();
+		}
 		
-		new MainFrame(pluginFinder);
-		pluginFinder.start();
+		return instance;
+	}
+	
+	public static void main(String[] args) {
+		MainFrame frame = MainFrame.getInstance();
+		frame.getPluginFinder().start();
 	}
 
 	@Override
