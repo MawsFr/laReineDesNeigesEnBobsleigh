@@ -3,16 +3,20 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.List;
 
 import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 
 import model.observer.Observer;
 import model.pluginfinder.PluginFinder;
 import plugins.Plugin;
 
-public class MainFrame extends JFrame implements Observer<List<Plugin>>{
+public class MainFrame extends JFrame implements Observer<List<Plugin>> {
 
 	public static MainFrame instance;
 	
@@ -21,10 +25,11 @@ public class MainFrame extends JFrame implements Observer<List<Plugin>>{
 	public static final int HEIGHT = 680;
 	protected PluginFinder pluginFinder;
 	protected MenuBar menuBar;
-	protected JTextPane editor;
+	protected JTextArea editor;
 	protected Container c;
 	
 	private MainFrame(){
+		super("Plugin's project");
 		
 		this.pluginFinder = new PluginFinder("./plugins");
 		pluginFinder.addObserver(this);
@@ -34,12 +39,21 @@ public class MainFrame extends JFrame implements Observer<List<Plugin>>{
 		this.menuBar = new MenuBar();
 		this.setJMenuBar(menuBar);
 		
-		this.editor = new JTextPane();
-		c.add(editor,BorderLayout.CENTER);
+		this.editor = new JTextArea();
+		c.add(new JScrollPane(editor), BorderLayout.CENTER);
+		
+		this.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				System.out.println("Stopping timer");
+				pluginFinder.stop();
+			}
+			
+			
+		});
 		
 		this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		this.setSize(getPreferredSize());
-		this.setTitle("Plugin's project");
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -47,7 +61,7 @@ public class MainFrame extends JFrame implements Observer<List<Plugin>>{
 		
 	}
 	
-	public JTextPane getEditor() {
+	public JTextArea getEditor() {
 		return editor;
 	}
 	
@@ -63,11 +77,6 @@ public class MainFrame extends JFrame implements Observer<List<Plugin>>{
 		return instance;
 	}
 	
-	public static void main(String[] args) {
-		MainFrame frame = MainFrame.getInstance();
-		frame.getPluginFinder().start();
-	}
-
 	@Override
 	public void update(List<Plugin> newPlugins) {
 		menuBar.removePluginsMenu();

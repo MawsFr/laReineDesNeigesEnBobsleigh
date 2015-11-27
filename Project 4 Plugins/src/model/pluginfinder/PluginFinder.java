@@ -37,6 +37,10 @@ public class PluginFinder extends Observable<List<Plugin>> implements ActionList
 		timer.start();
 	}
 	
+	public void stop() {
+		timer.stop();
+	}
+	
 	public List<File> getAllFiles() {
 		File dir = new File(pluginDirectory);
 		File[] files = dir.listFiles(pluginFilter);
@@ -63,38 +67,8 @@ public class PluginFinder extends Observable<List<Plugin>> implements ActionList
 	
 	public void notify(List<File> files) {
 		//TODO : notify the view
-		List<Plugin> pluginsFinded = filesToPlugins(files);
+		List<Plugin> pluginsFinded = pluginFilter.filesToPlugins(files);
 		notifyObservers(pluginsFinded);
 	}
 
-	public List<Plugin> filesToPlugins(List<File> files) {
-		// TODO Auto-generated method stub
-		List<Plugin> plugins = new ArrayList<Plugin>();
-		for(File file : files) {
-			plugins.add(fileToPlugin(file));
-		}
-		return plugins;
-	}
-	
-	public Plugin fileToPlugin(File file) {
-		Class<?> theClass = null;
-		Plugin theInstance = null;
-		try {
-			theClass = Class.forName(PLUGINS_PACKAGE + "." + file.getName().replaceFirst("\\.class", ""));
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-		if(!Plugin.class.isAssignableFrom(theClass)) {
-			throw new ClassCastException(theClass.getName() + " doesn't extend Plugin !");
-		}
-		try {
-			theInstance = (Plugin) theClass.newInstance();
-		} catch (InstantiationException | IllegalAccessException e) {
-			e.printStackTrace();
-		}
-		
-		return theInstance;
-	}
-	
-	
 }
