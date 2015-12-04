@@ -11,19 +11,22 @@ public class PluginFilter implements FilenameFilter{
 	
 	@Override
 	public boolean accept(File dir, String name) {
-		if(!name.endsWith(".class")) {
+		if(!nameEndsWithClass(name)) {
 			return false;
 		}
 		
-		Class<?> theClass = null;
+		Class<?> theClass = getTheClass(name);
 		
-		try {
-			theClass = Class.forName(PluginFinder.PLUGINS_PACKAGE + "." + name.replaceFirst("\\.class",""));
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace(); //TODO : Enlever a la fin
+		if(theClass == null) {
 			return false;
 		}
-		if(!Plugin.class.isAssignableFrom(theClass)) {
+		
+//		if(!isInPluginPackage(theClass)) {
+//			return false;
+//			
+//		}
+		
+		if(!isSubclassOfPlugin(theClass)) {
 			return false;
 		}
 		
@@ -31,8 +34,31 @@ public class PluginFilter implements FilenameFilter{
 		return true;
 	}
 	
+	public boolean nameEndsWithClass(String fileName) {
+		return fileName.endsWith(".class");
+		
+	}
+	
+	public Class<?> getTheClass(String name) {
+		Class<?> theClass = null;
+		try {
+			theClass = Class.forName(PluginFinder.PLUGINS_PACKAGE + "." + name.replaceFirst("\\.class",""));
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace(); //TODO : Enlever a la fin
+		}
+		
+		return theClass;
+	}
+	
+	public boolean isInPluginPackage(Class<?> theClass) {
+		return theClass.getPackage().equals("plugins");
+	}
+	
+	public boolean isSubclassOfPlugin(Class<?> theClass) {
+		return Plugin.class.isAssignableFrom(theClass);
+	}
+	
 	public List<Plugin> filesToPlugins(List<File> files) {
-		// TODO Auto-generated method stub
 		List<Plugin> plugins = new ArrayList<Plugin>();
 		for(File file : files) {
 			plugins.add(fileToPlugin(file));
@@ -44,11 +70,7 @@ public class PluginFilter implements FilenameFilter{
 		Class<?> theClass = null;
 		Plugin theInstance = null;
 		
-		try {
-			theClass = Class.forName(PluginFinder.PLUGINS_PACKAGE + "." + file.getName().replaceFirst("\\.class",""));
-		} catch (ClassNotFoundException e1) {
-			e1.printStackTrace();
-		}
+		theClass = getTheClass(file.getName());
 		//verify if theClass is null by extracting the variable creation into a method getTheClass
 		try {
 			theInstance = (Plugin) theClass.newInstance();
