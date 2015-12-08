@@ -11,9 +11,9 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import plugins.Plugin;
 import model.observer.Observer;
 import model.pluginfinder.PluginFinder;
-import plugins.Plugin;
 
 public class MainFrame extends JFrame implements Observer<List<Plugin>> {
 
@@ -29,8 +29,7 @@ public class MainFrame extends JFrame implements Observer<List<Plugin>> {
 	
 	private MainFrame(){
 		super("Plugin's project");
-		
-		this.pluginFinder = new PluginFinder("./plugins");
+		this.pluginFinder = new PluginFinder("dropins/plugins");
 		pluginFinder.addObserver(this);
 		c = getContentPane();
 		c.setLayout(new BorderLayout());

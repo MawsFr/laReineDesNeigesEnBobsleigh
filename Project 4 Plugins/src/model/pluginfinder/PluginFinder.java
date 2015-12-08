@@ -12,7 +12,7 @@ import model.observer.Observable;
 
 public class PluginFinder extends Observable<List<Plugin>> implements ActionListener {
 	
-	public static final String DEFAULT_PLUGINS_PATH = "./plugins";
+	public static final String DEFAULT_PLUGINS_PATH = "dropins/plugins";
 	public static final String PLUGINS_PACKAGE = Plugin.class.getPackage().getName();
 	
 	protected ExtendedTimer timer;
@@ -25,7 +25,7 @@ public class PluginFinder extends Observable<List<Plugin>> implements ActionList
 		this.pluginFilter = new PluginFilter();
 		timer = new ExtendedTimer(this);
 		this.plugins = new ArrayList<File>();
-		System.out.println(PLUGINS_PACKAGE);
+		System.out.println(this.pluginDirectory);
 		
 	}
 	
@@ -62,8 +62,6 @@ public class PluginFinder extends Observable<List<Plugin>> implements ActionList
 		}
 		
 	}
-	
-	
 	
 	public void notify(List<File> files) {
 		//TODO : notify the view

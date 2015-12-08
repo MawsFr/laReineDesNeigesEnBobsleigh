@@ -21,10 +21,10 @@ public class PluginFilter implements FilenameFilter{
 			return false;
 		}
 		
-//		if(!isInPluginPackage(theClass)) {
-//			return false;
-//			
-//		}
+		if(!isInPluginPackage(theClass)) {
+			return false;
+			
+		}
 		
 		if(!isSubclassOfPlugin(theClass)) {
 			return false;
@@ -51,7 +51,7 @@ public class PluginFilter implements FilenameFilter{
 	}
 	
 	public boolean isInPluginPackage(Class<?> theClass) {
-		return theClass.getPackage().equals("plugins");
+		return theClass.getPackage().getName().equals(PluginFinder.PLUGINS_PACKAGE);
 	}
 	
 	public boolean isSubclassOfPlugin(Class<?> theClass) {
