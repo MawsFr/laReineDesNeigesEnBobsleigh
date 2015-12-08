@@ -15,7 +15,4 @@ public class RemoveWhitespacesPlugin implements Plugin{
 		return s.replaceAll(" ", "");
 	}
 	
-	public static void main(String[] args) {
-		System.out.println(new RemoveWhitespacesPlugin().transform("Bonjour je m'appelle Togam"));
-	}
 }
