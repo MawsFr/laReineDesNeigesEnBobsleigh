@@ -11,6 +11,7 @@ public class Observable<O> implements IObservable<O> {
 	}
 	
 	public void addObserver(Observer<O> observer) {
+		//TODO : Ajouter un teste sur observer si null throw NullPointer Exception
 		this.observers.add(observer);
 	}
 	
@@ -20,6 +21,7 @@ public class Observable<O> implements IObservable<O> {
 	
 	@Override
 	public void notifyObservers(O object) {
+		//TODO : Throw une exceptions si observers est empty 
 		for(Observer<O> observer : observers) {
 			observer.update(object);
 		}
