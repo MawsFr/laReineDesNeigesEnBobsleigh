@@ -10,7 +10,6 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.JTextPane;
 
 import model.observer.Observer;
 import model.pluginfinder.PluginFinder;
