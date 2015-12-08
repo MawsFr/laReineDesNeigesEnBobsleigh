@@ -4,8 +4,6 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 
-import view.MainFrame;
-
 public class QuitAction extends AbstractAction {
 
 	public QuitAction() {
