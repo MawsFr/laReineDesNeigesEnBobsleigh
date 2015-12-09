@@ -10,9 +10,13 @@ public class ExtendedTimer implements ActionListener {
 	protected int tickInterval;
 	protected ActionListener actionListener;
 	protected Timer timer;
+	private boolean isStart;
+	private boolean isStop;
 	
 	public ExtendedTimer(ActionListener pluginFinder) {
 		this(pluginFinder, 1000);
+		isStart = false;
+		isStop = true;
 	}
 	
 	public ExtendedTimer(ActionListener pluginFinder, int tickInterval) {
@@ -31,6 +35,14 @@ public class ExtendedTimer implements ActionListener {
 		actionListener.actionPerformed(e);
 	}
 	
+	public boolean isStarted(){
+		return isStart;
+	}
+	
+	public boolean isStopped(){
+		return isStop;
+	}
+	
 	public void start() {
 		if(timer != null) {
 			timer.stop();
@@ -38,6 +50,7 @@ public class ExtendedTimer implements ActionListener {
 		
 		timer = new Timer(tickInterval, this);
 		timer.start();
+		isStart = true;
 	}
 	
 	public void stop() throws Exception {
@@ -45,6 +58,8 @@ public class ExtendedTimer implements ActionListener {
 			throw new Exception();
 		}
 		timer.stop();
+		isStop = true;
+		isStart = false;
 		timer = null;
 	}
 
