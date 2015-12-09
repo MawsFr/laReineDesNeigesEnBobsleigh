@@ -20,6 +20,7 @@ public class PluginFilter implements FilenameFilter{
 	
 	@Override
 	public boolean accept(File dir, String name) {
+		//TODO: verifier que le type de fichier est bien un .class
 		if(!nameEndsWithClass(name)) {
 			return false;
 		}
@@ -31,7 +32,10 @@ public class PluginFilter implements FilenameFilter{
 			this.nonChargedPluginsList.add(name);
 			return false;
 		}
-		
+		//TODO: Test si la class n'est pas un interface ou une Enum
+		//TODO: test si la class n'est pas un package
+		//TODO: test si la class n'est pas une class Abstraite
+		//TODO: Verifier que la class à bien un constructeur par défaut
 		if(isAbstractOrInterfaceOrEnum(theClass)
 				|| !isInPluginPackage(theClass)
 				|| !isSubclassOfPlugin(theClass)
@@ -49,6 +53,7 @@ public class PluginFilter implements FilenameFilter{
 	}
 
 	public boolean hasDefaultConstructor(Class<?> theClass) {
+		//Tester que la list de class ne soit pas vide
 		for(Constructor<?> constructor : theClass.getConstructors()) {
 			if(constructor.getParameterCount() == 0) {
 				return true;
@@ -59,10 +64,12 @@ public class PluginFilter implements FilenameFilter{
 	}
 
 	public boolean isAbstractOrInterfaceOrEnum(Class<?> theClass) {
+		//Tester que la fonction retourne True si le fichier est une class abstrait | une Interface | une énumeration
 		return theClass.isInterface() || Modifier.isAbstract(theClass.getModifiers()) || theClass.isEnum();
 	}
 
 	public boolean nameEndsWithClass(String fileName) {
+		//Tester que la fonction retourne bien true si c'est un fichier .class
 		return fileName.endsWith(".class");
 		
 	}
@@ -70,7 +77,7 @@ public class PluginFilter implements FilenameFilter{
 	public Class<?> getTheClass(String name) throws PluginException {
 		Class<?> theClass = null;
 		name = name.replaceFirst("\\.class", "");
-		
+		//verifier que la class est bien trouvé
 		try {
 			theClass = Class.forName(PluginFinder.PLUGINS_PACKAGE + "." + name);
 		} catch (ClassNotFoundException | NoClassDefFoundError e) {
@@ -81,14 +88,17 @@ public class PluginFilter implements FilenameFilter{
 	}
 	
 	public boolean isInPluginPackage(Class<?> theClass) {
+		//Tester que le fichier se trouve bien dans le package
 		return theClass.getPackage().getName().equals(PluginFinder.PLUGINS_PACKAGE);
 	}
 	
 	public boolean isSubclassOfPlugin(Class<?> theClass) {
+		//tester que la fonction retourne True si la class est une sous class de Plugin
 		return Plugin.class.isAssignableFrom(theClass);
 	}
 	
 	public List<Plugin> filesToPlugins(List<File> files) throws PluginException {
+		//verifier que la list files ne sois pas null
 		List<Plugin> plugins = new ArrayList<Plugin>();
 		for(File file : files) {
 			plugins.add(fileToPlugin(file));

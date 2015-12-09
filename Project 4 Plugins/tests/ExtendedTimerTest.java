@@ -32,8 +32,8 @@ public class ExtendedTimerTest {
 		timer = new ExtendedTimer(new PluginFinder(), -1);
 	}
 	
-	@Test(expected = Exception.class)
-	public void timerIsAlreadyStop() throws Exception{
+	@Test(expected = NullPointerException.class)
+	public void timerIsAlreadyStop() throws NullPointerException{
 		timer = new ExtendedTimer(new PluginFinder(),20); 
 		assertTrue(timer.isStopped());
 		timer.start();

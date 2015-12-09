@@ -48,9 +48,9 @@ public class ExtendedTimer implements ActionListener {
 		timer.start();
 	}
 	
-	public void stop() throws Exception {
+	public void stop() throws NullPointerException {
 		if(timer == null){
-			throw new Exception();
+			throw new NullPointerException();
 		}
 		timer.stop();
 		timer = null;
