@@ -100,16 +100,16 @@ public class PluginFinder extends Observable<List<Plugin>> implements ActionList
 		for(String pluginName : pluginFilter.getNonLoadedPluginsList()) {
 			pluginsNotLoaded += pluginName + "\n";
 			File file = new File(pluginDirectory + File.separator + pluginName);
-			if(!file.exists()) { //TODO : Faire le test en mettant un nom de fichier bidon ?
+			if(!file.exists()) {
 				throw new FileNotFoundException("The file " + pluginName + " has disapeared");
 			}
 			
-			try { //TODO : Test
+			try {
 				sourcePath = Paths.get(file.getAbsolutePath());
 			} catch(InvalidPathException e) {
 				throw e;
 			}
-			try { //TEST
+			try {
 				Files.move(sourcePath, dropinsPath.resolve(sourcePath.getFileName()), StandardCopyOption.REPLACE_EXISTING);
 			} catch (IOException e1) {
 				throw e1;
