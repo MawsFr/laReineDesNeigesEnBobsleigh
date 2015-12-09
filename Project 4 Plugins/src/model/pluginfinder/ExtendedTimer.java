@@ -16,8 +16,12 @@ public class ExtendedTimer implements ActionListener {
 	}
 	
 	public ExtendedTimer(ActionListener pluginFinder, int tickInterval) {
-		//TODO : throw une exception sur pluginFinder est null
-		//TODO : throw une exception si tickInterval est inferieur ou = 0
+		if(pluginFinder == null){
+			throw new NullPointerException();
+		}
+		if(tickInterval <=0){
+			throw new IllegalArgumentException();
+		}
 		this.actionListener = pluginFinder;
 		this.tickInterval = tickInterval;
 	}
@@ -28,7 +32,6 @@ public class ExtendedTimer implements ActionListener {
 	}
 	
 	public void start() {
-		//TODO : Ici on a deja le test de si le timer est deja start, il faut faire le test associé dans ExtendedTimerTest !
 		if(timer != null) {
 			timer.stop();
 		}
@@ -37,8 +40,10 @@ public class ExtendedTimer implements ActionListener {
 		timer.start();
 	}
 	
-	public void stop() {
-		//TODO : throw une exception si déjà stoppé (si timer est deja null quoi)
+	public void stop() throws Exception {
+		if(timer == null){
+			throw new Exception();
+		}
 		timer.stop();
 		timer = null;
 	}

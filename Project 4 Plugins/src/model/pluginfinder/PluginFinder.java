@@ -14,10 +14,10 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
+import exceptions.PluginException;
 import model.observer.Observable;
 import plugins.Plugin;
 import view.MainFrame;
-import exceptions.PluginException;
 
 public class PluginFinder extends Observable<List<Plugin>> implements ActionListener {
 	
@@ -46,7 +46,7 @@ public class PluginFinder extends Observable<List<Plugin>> implements ActionList
 		timer.start();
 	}
 	
-	public void stop() {
+	public void stop() throws Exception {
 		timer.stop();
 	}
 	

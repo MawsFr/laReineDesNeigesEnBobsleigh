@@ -44,7 +44,11 @@ public class MainFrame extends JFrame implements Observer<List<Plugin>> {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				System.out.println("Stopping timer");
-				pluginFinder.stop();
+				try {
+					pluginFinder.stop();
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
 			}
 			
 			
