@@ -1,3 +1,4 @@
+package pluginfinder;
 import static org.junit.Assert.*;
 import model.pluginfinder.PluginFilter;
 

@@ -3,12 +3,13 @@ package model.pluginfinder;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
-import exceptions.PluginException;
 import plugins.Plugin;
+import exceptions.PluginException;
 
 public class PluginFilter implements FilenameFilter{
 	
@@ -39,7 +40,8 @@ public class PluginFilter implements FilenameFilter{
 		if(isAbstractOrInterfaceOrEnum(theClass)
 				|| !isInPluginPackage(theClass)
 				|| !isSubclassOfPlugin(theClass)
-				|| !hasDefaultConstructor(theClass)) {
+				|| !hasDefaultConstructor(theClass)
+				|| !hasCorrectMethods(theClass)) {
 			this.nonChargedPluginsList.add(name); //TODO : Faire des assert equals sur la size de la list des plugins invalides
 			return false;
 		}
@@ -65,6 +67,26 @@ public class PluginFilter implements FilenameFilter{
 	public boolean isAbstractOrInterfaceOrEnum(Class<?> theClass) {
 		//TODO : theClass non null
 		return theClass.isInterface() || Modifier.isAbstract(theClass.getModifiers()) || theClass.isEnum();
+	}
+	
+	public boolean hasCorrectMethods(Class<?> theClass) {
+		//TODO : Verifier si theClass different de null
+		Method getLabelMethod = null;
+		Method transformMethod = null;
+		
+		try {
+			getLabelMethod = theClass.getMethod("getLabel");
+			transformMethod = theClass.getMethod("transform", String.class);
+	 	} catch (NoSuchMethodException | SecurityException e) {
+	 		return false;
+	 	}
+		
+		if(!getLabelMethod.getReturnType().equals(String.class) || !transformMethod.getReturnType().equals(String.class)) {
+			return false;
+		}
+		
+		
+		return true;
 	}
 
 	public boolean nameEndsWithClass(String fileName) {

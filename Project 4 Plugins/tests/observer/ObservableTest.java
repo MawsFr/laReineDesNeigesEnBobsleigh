@@ -1,3 +1,4 @@
+package observer;
 import org.junit.Test;
 
 import model.observer.Observable;
