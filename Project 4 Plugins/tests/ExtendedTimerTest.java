@@ -35,21 +35,23 @@ public class ExtendedTimerTest {
 	@Test(expected = Exception.class)
 	public void timerIsAlreadyStop() throws Exception{
 		timer = new ExtendedTimer(new PluginFinder(),20); 
+		assertTrue(timer.isStopped());
 		timer.start();
-		assertTrue(timer != null);
+		assertTrue(timer.isStart());
 		timer.stop();
-		assertTrue(timer == null);
+		assertTrue(timer.isStopped());
 		timer.stop();
-		assertTrue(timer == null);
+		assertTrue(timer.isStopped());
 	}
 	
 	@Test
 	public void timerIsAlreadyStarted(){
 		timer = new ExtendedTimer(new PluginFinder(),20);
+		assertTrue(timer.isStopped());
 		timer.start();
-		assertTrue(timer != null);
+		assertTrue(timer.isStart());
 		timer.start();
-		assertTrue(timer != null);
+		assertTrue(timer.isStart());
 	}
 	
 }

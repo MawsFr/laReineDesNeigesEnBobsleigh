@@ -31,6 +31,13 @@ public class ExtendedTimer implements ActionListener {
 		actionListener.actionPerformed(e);
 	}
 	
+	public boolean isStart(){
+		return timer != null;
+	}
+	
+	public boolean isStopped(){
+		return timer == null;
+	}
 	
 	public void start() {
 		if(timer != null) {
