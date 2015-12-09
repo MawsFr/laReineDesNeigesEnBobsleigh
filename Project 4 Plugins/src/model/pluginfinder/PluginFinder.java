@@ -3,16 +3,25 @@ package model.pluginfinder;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import plugins.Plugin;
+import javax.swing.JOptionPane;
+
 import model.observer.Observable;
+import plugins.Plugin;
+import view.MainFrame;
+import exceptions.PluginException;
 
 public class PluginFinder extends Observable<List<Plugin>> implements ActionListener {
 	
-	public static final String DEFAULT_PLUGINS_PATH = "./plugins";
+	public static final String DEFAULT_PLUGINS_PATH = "dropins/plugins";
 	public static final String PLUGINS_PACKAGE = Plugin.class.getPackage().getName();
 	
 	protected ExtendedTimer timer;
@@ -25,7 +34,7 @@ public class PluginFinder extends Observable<List<Plugin>> implements ActionList
 		this.pluginFilter = new PluginFilter();
 		timer = new ExtendedTimer(this);
 		this.plugins = new ArrayList<File>();
-		System.out.println(PLUGINS_PACKAGE);
+		System.out.println(this.pluginDirectory);
 		
 	}
 	
@@ -60,14 +69,48 @@ public class PluginFinder extends Observable<List<Plugin>> implements ActionList
 			this.plugins = newPlugins;
 			notify(plugins);
 		}
+		if(!pluginFilter.getNonLoadedPluginsList().isEmpty()) {
+			String pluginsNotLoaded = "";
+			Path dropinsPath = null;
+			dropinsPath = Paths.get(pluginDirectory);
+			dropinsPath = dropinsPath.getParent();
+			
+			pluginsNotLoaded = moveInvalidPlugin(pluginsNotLoaded, dropinsPath);
+			
+			JOptionPane.showMessageDialog(MainFrame.getInstance(),
+				    "Didn't manage to load all plugins, please verify if there are all files needed for some of them.\n"
+				    + "Plugins not loaded (moved to directory : " + dropinsPath + ") :\n"
+				    + pluginsNotLoaded,
+				    "Plugin loading semi-failed",
+				    JOptionPane.WARNING_MESSAGE);
+			pluginFilter.getNonLoadedPluginsList().clear();
+		}
 		
 	}
-	
-	
+
+	public String moveInvalidPlugin(String pluginsNotLoaded, Path dropinsPath) {
+		Path sourcePath = null;
+		for(String pluginName : pluginFilter.getNonLoadedPluginsList()) {
+			pluginsNotLoaded += pluginName + "\n";
+			File file = new File(pluginDirectory + File.separator + pluginName);
+			sourcePath = Paths.get(file.getAbsolutePath());
+			try {
+				Files.move(sourcePath, dropinsPath.resolve(sourcePath.getFileName()), StandardCopyOption.REPLACE_EXISTING);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			
+		}
+		return pluginsNotLoaded;
+	}
 	
 	public void notify(List<File> files) {
 		//TODO : notify the view
-		List<Plugin> pluginsFinded = pluginFilter.filesToPlugins(files);
+		List<Plugin> pluginsFinded = null;
+		try {
+			pluginsFinded = pluginFilter.filesToPlugins(files);
+		} catch (PluginException e) {}
+		
 		notifyObservers(pluginsFinded);
 	}
 

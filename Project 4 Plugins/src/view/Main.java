@@ -12,7 +12,7 @@ public class Main {
 			frame.getPluginFinder().start();
 		} else {
 			PluginAddedLogger console = new PluginAddedLogger();
-			PluginFinder pluginFinder = new PluginFinder("./plugins");
+			PluginFinder pluginFinder = new PluginFinder("dropins/plugins");
 			pluginFinder.addObserver(console);
 			pluginFinder.start();
 		}
