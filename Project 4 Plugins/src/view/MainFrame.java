@@ -8,6 +8,7 @@ import java.awt.event.WindowEvent;
 import java.util.List;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
@@ -74,6 +75,20 @@ public class MainFrame extends JFrame implements Observer<List<Plugin>> {
 		
 		return instance;
 	}
+	
+	public void showWarning(String title, String message) {
+		JOptionPane.showMessageDialog(this,
+			    message,
+			    title,
+			    JOptionPane.WARNING_MESSAGE);
+	}
+	
+	public void showError(String title, String message) {
+		JOptionPane.showMessageDialog(this,
+			    message,
+			    title,
+			    JOptionPane.ERROR_MESSAGE);
+	} 
 	
 	@Override
 	public void update(List<Plugin> newPlugins) {
