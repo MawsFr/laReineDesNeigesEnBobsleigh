@@ -2,8 +2,6 @@ package plugins;
 
 import plugins.Plugin;
 
-
-
 public class MockedPlugin implements Plugin {
 	
 	@Override

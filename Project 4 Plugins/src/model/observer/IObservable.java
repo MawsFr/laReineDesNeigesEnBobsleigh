@@ -16,5 +16,8 @@ public interface IObservable<O> {
 	 * @param object
 	 */
 	public void notifyObservers(O object);
+	
+//	public void error(String title, String message);
+//	public void warning(String title, String message);
 
 }

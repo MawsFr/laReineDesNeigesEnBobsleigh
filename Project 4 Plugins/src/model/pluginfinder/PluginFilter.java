@@ -225,9 +225,6 @@ public class PluginFilter implements FilenameFilter{
 			throw new NullPointerException("You must specify a non null files parameters");
 		}
 		
-		if(files.isEmpty()) {
-			throw new IllegalArgumentException("You must specify a non empty files parameters");
-		}
 		//DONE : verifier que la list files ne sois pas null ou vide
 		List<Plugin> plugins = new ArrayList<Plugin>();
 		for(File file : files) {

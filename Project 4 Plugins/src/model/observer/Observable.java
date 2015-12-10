@@ -24,8 +24,8 @@ public class Observable<O> implements IObservable<O> {
 	 * Adds an observer to the list
 	 * @param observer The observer to add
 	 */
-	public void addObserver(Observer<O> observer) {
-		if(observer==null){
+	public synchronized void addObserver(Observer<O> observer) {
+		if(observer == null){
 			throw new NullPointerException();
 		}
 		this.observers.add(observer);
@@ -34,7 +34,7 @@ public class Observable<O> implements IObservable<O> {
 	/* (non-Javadoc)
 	 * @see model.observer.IObservable#notifyObservers()
 	 */
-	public void notifyObservers() {
+	public synchronized void notifyObservers() {
 		notifyObservers(null);
 	}
 	
@@ -42,14 +42,30 @@ public class Observable<O> implements IObservable<O> {
 	 * @see model.observer.IObservable#notifyObservers(java.lang.Object)
 	 */
 	@Override
-	public void notifyObservers(O object) {
+	public synchronized void notifyObservers(O object) {
 		if(observers.isEmpty()){
 			throw new NullPointerException();
 		}
-		for(Observer<O> observer : observers) {	
-			observer.update(object);
+		
+		for(Observer<O> observer : observers) {
+			observer.update(this, object);
 		}
 	}
+	
+//	@Override
+//	public synchronized void warning(String title, String message) {
+//		for(Observer<O> observer : observers) {	
+//			observer.showMessage(title, message, 1);;
+//		}
+//	}
+//
+//	@Override
+//	public synchronized void error(String title, String message) {
+//		for(Observer<O> observer : observers) {	
+//			observer.showMessage(title, message, 0);;
+//		}
+//	}
+//	
 	
 
 }

@@ -11,6 +11,7 @@ public interface Observer<O> {
 	 * Does action when observable notify this observer
 	 * @param object The object to proccess (may be null)
 	 */
-	public void update(O object);
+	public void update(Observable<O> source, O object);
+//	public void showMessage(String title, String message, int type);
 
 }

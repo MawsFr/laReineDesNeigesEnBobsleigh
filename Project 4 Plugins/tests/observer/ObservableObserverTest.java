@@ -5,11 +5,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * @author admin
  * @param <O>
  *
  */
-public class ObservableObserverTest<O>{
+public class ObservableObserverTest{
 	
 	protected MockObservable createObservable() {
 		return new MockObservable();
@@ -53,9 +52,12 @@ public class ObservableObserverTest<O>{
 	
 	@Test
 	public void notifyObserverNullParameterTest() {
+		MockObserver observer2 = createObserver();
 		observable.addObserver(observer);
+		observable.addObserver(observer2);
 		observable.notifyObservers(null); //to know if we authorize it or not
 		assertTrue(observer.isNotified());
+		assertTrue(observer2.isNotified());
 	}
 	
 	

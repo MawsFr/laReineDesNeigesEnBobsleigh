@@ -4,20 +4,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.InvalidPathException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import exceptions.PluginException;
 import model.observer.Observable;
 import plugins.Plugin;
-import view.MainFrame;
+import exceptions.PluginException;
 
 public class PluginFinder extends Observable<List<Plugin>> implements ActionListener {
 	
@@ -43,7 +36,6 @@ public class PluginFinder extends Observable<List<Plugin>> implements ActionList
 		this.pluginFilter = new PluginFilter();
 		timer = new ExtendedTimer(this);
 		this.plugins = new ArrayList<File>();
-		System.out.println(this.pluginDirectory);
 		
 	}
 	
@@ -73,6 +65,32 @@ public class PluginFinder extends Observable<List<Plugin>> implements ActionList
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		searchForNewPlugins();
+		
+//		if(!pluginFilter.getNonLoadedPluginsList().isEmpty()) {
+//			String pluginsNotLoaded = "";
+//			Path dropinsPath = null;
+//			try {
+//				dropinsPath = Paths.get(pluginDirectory);
+//				dropinsPath = dropinsPath.getParent();
+//				pluginsNotLoaded = moveInvalidPlugin(pluginsNotLoaded, dropinsPath);
+//			} catch(IllegalArgumentException | IOException e1) {
+//				error("Error while moving invalid plugins", e1.getMessage());
+//				e1.printStackTrace();
+//			}
+//			
+//			
+//			
+//			warning(
+//				    "Didn't manage to load all plugins, please verify if there are all files needed for some of them.\n"
+//			+ "Plugins not loaded (moved to directory : " + dropinsPath + ") :\n" + pluginsNotLoaded, "Plugin loading semi-failed");
+//			
+//			pluginFilter.getNonLoadedPluginsList().clear();
+//		}
+		
+	}
+
+	public void searchForNewPlugins() {
 		List<File> newPlugins = getAllFiles();
 		
 		if(!(newPlugins.equals(this.plugins))) {
@@ -80,68 +98,49 @@ public class PluginFinder extends Observable<List<Plugin>> implements ActionList
 			this.plugins = newPlugins;
 			notify(plugins);
 		}
-		if(!pluginFilter.getNonLoadedPluginsList().isEmpty()) {
-			String pluginsNotLoaded = "";
-			Path dropinsPath = null;
-			try {
-				dropinsPath = Paths.get(pluginDirectory);
-				dropinsPath = dropinsPath.getParent();
-				pluginsNotLoaded = moveInvalidPlugin(pluginsNotLoaded, dropinsPath);
-			} catch(IllegalArgumentException | IOException e1) {
-				MainFrame.getInstance().showError("Error while moving invalid plugins", e1.getMessage());
-			}
-			
-			
-			
-			MainFrame.getInstance().showWarning(
-				    "Didn't manage to load all plugins, please verify if there are all files needed for some of them.\n"
-			+ "Plugins not loaded (moved to directory : " + dropinsPath + ") :\n" + pluginsNotLoaded, "Plugin loading semi-failed");
-			
-			pluginFilter.getNonLoadedPluginsList().clear();
-		}
-		
 	}
 
-	public String moveInvalidPlugin(String pluginsNotLoaded, Path dropinsPath) throws InvalidPathException, FileNotFoundException, IOException {
-		//TODO : Verification sur les parametre non null et non empty pour les string
-		
-		if(pluginsNotLoaded == null || dropinsPath == null){
-			throw new NullPointerException();
-		}
-		if(pluginsNotLoaded.isEmpty()){
-			throw new IllegalArgumentException();
-		}
-		
-		Path sourcePath = null;
-		for(String pluginName : pluginFilter.getNonLoadedPluginsList()) {
-			pluginsNotLoaded += pluginName + "\n";
-			File file = new File(pluginDirectory + File.separator + pluginName);
-			if(!file.exists()) {
-				throw new FileNotFoundException("The file " + pluginName + " has disapeared");
-			}
-			
-			try {
-				sourcePath = Paths.get(file.getAbsolutePath());
-			} catch(InvalidPathException e) {
-				throw e;
-			}
-			try {
-				Files.move(sourcePath, dropinsPath.resolve(sourcePath.getFileName()), StandardCopyOption.REPLACE_EXISTING);
-			} catch (IOException e1) {
-				throw e1;
-			}
-			
-		}
-		return pluginsNotLoaded;
-	}
+//	/**
+//	 * 
+//	 */
+//	public String moveInvalidPlugin(String pluginsNotLoaded, Path dropinsPath) throws InvalidPathException, FileNotFoundException, IOException {
+//		//TODO : Verification sur les parametre non null et non empty pour les string
+//		
+//		if(pluginsNotLoaded == null || dropinsPath == null){
+//			throw new NullPointerException();
+//		}
+//		
+//		Path sourcePath = null;
+//		for(String pluginName : pluginFilter.getNonLoadedPluginsList()) {
+//			pluginsNotLoaded += pluginName + "\n";
+//			File file = new File(pluginDirectory + File.separator + pluginName);
+//			if(!file.exists()) {
+//				throw new FileNotFoundException("The file " + pluginName + " has disapeared");
+//			}
+//			
+//			try {
+//				sourcePath = Paths.get(file.getAbsolutePath());
+//			} catch(InvalidPathException e) {
+//				throw e;
+//			}
+//			try {
+//				Files.move(sourcePath, dropinsPath.resolve(sourcePath.getFileName()), StandardCopyOption.REPLACE_EXISTING);
+//			} catch (IOException e1) {
+//				throw e1;
+//			}
+//			
+//		}
+//		return pluginsNotLoaded;
+//	}
 	
+	/**
+	 * @param files
+	 */
 	public void notify(List<File> files) {
 		if(files == null){
 			throw new NullPointerException();
 		}
-		if(files.isEmpty()){
-			throw new IllegalArgumentException();
-		}
+		
 		//TODO : verifier files non null
 		List<Plugin> pluginsFinded = null;
 		try {
@@ -155,5 +154,6 @@ public class PluginFinder extends Observable<List<Plugin>> implements ActionList
 		
 		notifyObservers(pluginsFinded);
 	}
+	
 
 }

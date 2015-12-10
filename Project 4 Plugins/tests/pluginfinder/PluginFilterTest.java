@@ -41,9 +41,9 @@ public class PluginFilterTest {
 
 	@Test
 	public void pluginNotInPluginPackageTest() throws PluginException {
-		assertTrue(pluginFilter.nameEndsWithClass("MockedPlugin2.class"));
-		pluginFilter.accept(null, "MockedPlugin2.class");
-		assertEquals("MockedPlugin2.class", pluginFilter.getNonLoadedPluginsList().get(0));
+		assertTrue(pluginFilter.nameEndsWithClass("MockPlugin2.class"));
+		pluginFilter.accept(null, "MockPlugin2.class");
+		assertEquals("MockPlugin2.class", pluginFilter.getNonLoadedPluginsList().get(0));
 	}
 
 	@Test
@@ -199,11 +199,6 @@ public class PluginFilterTest {
 	@Test(expected = NullPointerException.class)
 	public void filesToPluginsWithNullParameterTest() throws NullPointerException, IllegalArgumentException, PluginException, FileNotFoundException {
 		pluginFilter.filesToPlugins(null);
-	}
-	
-	@Test(expected = IllegalArgumentException.class)
-	public void filesToPluginsWithEmptyListParameterTest() throws NullPointerException, IllegalArgumentException, PluginException, FileNotFoundException {
-		pluginFilter.filesToPlugins(new ArrayList<File>());
 	}
 	
 	@Test(expected = NullPointerException.class)

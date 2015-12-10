@@ -7,11 +7,6 @@ import model.pluginfinder.ExtendedTimer;
 import model.pluginfinder.PluginFinder;
 
 /**
- * 
- */
-
-/**
- * @author admin
  *
  */
 public class ExtendedTimerTest {
