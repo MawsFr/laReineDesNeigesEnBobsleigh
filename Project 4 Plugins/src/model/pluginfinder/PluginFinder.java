@@ -34,9 +34,11 @@ public class PluginFinder extends Observable<List<Plugin>> implements ActionList
 		if(pluginDirectory ==null){
 			throw new NullPointerException();
 		}
+		
 		if(pluginDirectory.isEmpty()){
 			throw new IllegalArgumentException();
 		}
+		
 		this.pluginDirectory = pluginDirectory;
 		this.pluginFilter = new PluginFilter();
 		timer = new ExtendedTimer(this);
@@ -103,7 +105,7 @@ public class PluginFinder extends Observable<List<Plugin>> implements ActionList
 	public String moveInvalidPlugin(String pluginsNotLoaded, Path dropinsPath) throws InvalidPathException, FileNotFoundException, IOException {
 		//TODO : Verification sur les parametre non null et non empty pour les string
 		
-		if(pluginsNotLoaded == null ||dropinsPath == null){
+		if(pluginsNotLoaded == null || dropinsPath == null){
 			throw new NullPointerException();
 		}
 		if(pluginsNotLoaded.isEmpty()){
