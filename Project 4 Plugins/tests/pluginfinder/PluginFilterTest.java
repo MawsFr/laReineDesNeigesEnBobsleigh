@@ -15,6 +15,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import plugins.MockClass;
+import plugins.MockClass2;
+import plugins.MockEnum;
+import plugins.MockInterface;
+import plugins.MockedAbstractPlugin;
+import plugins.MockedPlugin;
 import plugins.Plugin;
 import exceptions.PluginException;
 
@@ -49,21 +55,72 @@ public class PluginFilterTest {
 
 	@Test
 	public void abstractPluginTest() throws PluginException {
-		assertTrue(pluginFilter.nameEndsWithClass("CesarCodePlugin.class"));
-		assertNotNull(pluginFilter.getTheClass("CesarCodePlugin.class"));
-		pluginFilter.accept(null, "CesarCodePlugin.class");
-		assertEquals("CesarCodePlugin.class", pluginFilter.getNonLoadedPluginsList().get(0));
+		assertTrue(pluginFilter.nameEndsWithClass("MockedAbstractPlugin.class"));
+		assertNotNull(pluginFilter.getTheClass("MockedAbstractPlugin.class"));
+		assertTrue(pluginFilter.isAbstractOrInterfaceOrEnum(MockedAbstractPlugin.class));
+		pluginFilter.accept(null, "MockedAbstractPlugin.class");
+		assertEquals("MockedAbstractPlugin.class", pluginFilter.getNonLoadedPluginsList().get(0));
+	}
+	
+	@Test
+	public void enumPluginTest() throws PluginException {
+		assertTrue(pluginFilter.nameEndsWithClass("MockEnum.class"));
+		assertNotNull(pluginFilter.getTheClass("MockEnum.class"));
+		assertTrue(pluginFilter.isAbstractOrInterfaceOrEnum(MockEnum.class));
+		pluginFilter.accept(null, "MockEnum.class");
+		assertEquals("MockEnum.class", pluginFilter.getNonLoadedPluginsList().get(0));
+	}
+	
+	@Test
+	public void interfacePluginTest() throws PluginException {
+		assertTrue(pluginFilter.nameEndsWithClass("MockInterface.class"));
+		assertNotNull(pluginFilter.getTheClass("MockInterface.class"));
+		assertTrue(pluginFilter.isAbstractOrInterfaceOrEnum(MockInterface.class));
+		pluginFilter.accept(null, "MockInterface.class");
+		assertEquals("MockInterface.class", pluginFilter.getNonLoadedPluginsList().get(0));
 	}
 
 	
-//	//TODO : Pour ces tests il faut un mocked plugin dans plugins et avoir une autre interface Plugin
-//	@Test
-//	public void notSubclassOfPluginTest() throws PluginException {
-//		assertTrue(pluginFilter.nameEndsWithClass("MockedPlugin.class"));
-//		assertNotNull(pluginFilter.getTheClass("MockedPlugin.class"));
-//		pluginFilter.accept(null, "MockedPlugin.class");
-//		assertEquals("MockedPlugin.class", pluginFilter.getNonLoadedPluginsList().get(0));
-//	}
+	//TODO : Pour ces tests il faut un mocked plugin dans plugins et avoir une autre interface Plugin
+	@Test
+	public void notSubclassOfPluginTest() throws PluginException {
+		assertTrue(pluginFilter.nameEndsWithClass("MockClass.class"));
+		assertNotNull(pluginFilter.getTheClass("MockClass.class"));
+		assertFalse(pluginFilter.isSubclassOfPlugin(MockClass.class));
+		pluginFilter.accept(null, "MockClass.class");
+		assertEquals("MockClass.class", pluginFilter.getNonLoadedPluginsList().get(0));
+	}
+	
+	@Test
+	public void hasNoDefaultConstructorTest() throws PluginException {
+		assertTrue(pluginFilter.nameEndsWithClass("MockClass.class"));
+		assertNotNull(pluginFilter.getTheClass("MockClass.class"));
+		assertTrue(pluginFilter.isInPluginPackage(MockClass.class));
+		assertFalse(pluginFilter.hasDefaultConstructor(MockClass.class));
+		pluginFilter.accept(null, "MockClass.class");
+		assertEquals("MockClass.class", pluginFilter.getNonLoadedPluginsList().get(0));
+	}
+	
+	@Test
+	public void hasCorrectMethod() {
+		assertTrue(pluginFilter.hasCorrectMethods(MockedPlugin.class));
+	}
+	
+	@Test
+	public void hasNotCorrectMethod() {
+		assertFalse(pluginFilter.hasCorrectMethods(MockClass.class));
+	}
+	
+	@Test
+	public void hasNotCorrectReturnTypes() {
+		assertFalse(pluginFilter.hasCorrectMethods(MockClass2.class));
+	}
+	
+	@Test
+	public void acceptedPluginTest() {
+		pluginFilter.accept(null, "MockedPlugin.class");
+		assertEquals(0, pluginFilter.getNonLoadedPluginsList().size());
+	}
 	
 //	@Test
 //	public void fileToPluginTest() throws PluginException, URISyntaxException, FileNotFoundException {
