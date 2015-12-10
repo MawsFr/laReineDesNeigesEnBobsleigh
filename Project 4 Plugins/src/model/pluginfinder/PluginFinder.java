@@ -3,8 +3,10 @@ package model.pluginfinder;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
@@ -12,12 +14,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.swing.JOptionPane;
-
+import exceptions.PluginException;
 import model.observer.Observable;
 import plugins.Plugin;
 import view.MainFrame;
-import exceptions.PluginException;
 
 public class PluginFinder extends Observable<List<Plugin>> implements ActionListener {
 	
@@ -30,6 +30,7 @@ public class PluginFinder extends Observable<List<Plugin>> implements ActionList
 	protected String pluginDirectory;
 	
 	public PluginFinder(String pluginDirectory) {
+		//TODO : verifier pluginDirectory non null et non empty
 		this.pluginDirectory = pluginDirectory;
 		this.pluginFilter = new PluginFilter();
 		timer = new ExtendedTimer(this);
@@ -46,7 +47,7 @@ public class PluginFinder extends Observable<List<Plugin>> implements ActionList
 		timer.start();
 	}
 	
-	public void stop() {
+	public void stop() throws Exception {
 		timer.stop();
 	}
 	
@@ -55,6 +56,7 @@ public class PluginFinder extends Observable<List<Plugin>> implements ActionList
 		File[] files = dir.listFiles(pluginFilter);
 		
 		if(files == null || files.length == 0) {
+			//TODO : Verifier que l'on a bien une liste vide quand on a pas de fichier dans le dossier
 			return new ArrayList<File>();
 		}
 		
@@ -66,38 +68,51 @@ public class PluginFinder extends Observable<List<Plugin>> implements ActionList
 		List<File> newPlugins = getAllFiles();
 		
 		if(!(newPlugins.equals(this.plugins))) {
+			//TODO : Faire un gros test qui test que quand on ajoute un plugin dans le dossier ca modifie bien la liste "plugins"
 			this.plugins = newPlugins;
 			notify(plugins);
 		}
 		if(!pluginFilter.getNonLoadedPluginsList().isEmpty()) {
 			String pluginsNotLoaded = "";
 			Path dropinsPath = null;
-			dropinsPath = Paths.get(pluginDirectory);
-			dropinsPath = dropinsPath.getParent();
+			try {
+				dropinsPath = Paths.get(pluginDirectory);
+				dropinsPath = dropinsPath.getParent();
+				pluginsNotLoaded = moveInvalidPlugin(pluginsNotLoaded, dropinsPath);
+			} catch(IllegalArgumentException | IOException e1) {
+				MainFrame.getInstance().showError("Error while moving invalid plugins", e1.getMessage());
+			}
 			
-			pluginsNotLoaded = moveInvalidPlugin(pluginsNotLoaded, dropinsPath);
 			
-			JOptionPane.showMessageDialog(MainFrame.getInstance(),
+			
+			MainFrame.getInstance().showWarning(
 				    "Didn't manage to load all plugins, please verify if there are all files needed for some of them.\n"
-				    + "Plugins not loaded (moved to directory : " + dropinsPath + ") :\n"
-				    + pluginsNotLoaded,
-				    "Plugin loading semi-failed",
-				    JOptionPane.WARNING_MESSAGE);
+			+ "Plugins not loaded (moved to directory : " + dropinsPath + ") :\n" + pluginsNotLoaded, "Plugin loading semi-failed");
+			
 			pluginFilter.getNonLoadedPluginsList().clear();
 		}
 		
 	}
 
-	public String moveInvalidPlugin(String pluginsNotLoaded, Path dropinsPath) {
+	public String moveInvalidPlugin(String pluginsNotLoaded, Path dropinsPath) throws InvalidPathException, FileNotFoundException, IOException {
+		//TODO : Verification sur les parametre non null et non empty pour les string
 		Path sourcePath = null;
 		for(String pluginName : pluginFilter.getNonLoadedPluginsList()) {
 			pluginsNotLoaded += pluginName + "\n";
 			File file = new File(pluginDirectory + File.separator + pluginName);
-			sourcePath = Paths.get(file.getAbsolutePath());
+			if(!file.exists()) {
+				throw new FileNotFoundException("The file " + pluginName + " has disapeared");
+			}
+			
+			try {
+				sourcePath = Paths.get(file.getAbsolutePath());
+			} catch(InvalidPathException e) {
+				throw e;
+			}
 			try {
 				Files.move(sourcePath, dropinsPath.resolve(sourcePath.getFileName()), StandardCopyOption.REPLACE_EXISTING);
 			} catch (IOException e1) {
-				e1.printStackTrace();
+				throw e1;
 			}
 			
 		}
@@ -105,11 +120,16 @@ public class PluginFinder extends Observable<List<Plugin>> implements ActionList
 	}
 	
 	public void notify(List<File> files) {
-		//TODO : notify the view
+		//TODO : verifier files non null
 		List<Plugin> pluginsFinded = null;
 		try {
 			pluginsFinded = pluginFilter.filesToPlugins(files);
-		} catch (PluginException e) {}
+		} catch (PluginException 
+				| NullPointerException 
+				| IllegalArgumentException 
+				| FileNotFoundException e) {
+			e.printStackTrace();
+		}
 		
 		notifyObservers(pluginsFinded);
 	}

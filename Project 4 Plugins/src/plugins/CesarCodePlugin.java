@@ -6,6 +6,7 @@ public abstract class CesarCodePlugin implements Plugin{
 	protected int number;
 	
 	public CesarCodePlugin(int number) {
+		//TODO : Verifier que c'est superieur ou egale a zero
 		this.number = number;
 	}
 	
