@@ -10,5 +10,9 @@ public class MockObserver implements Observer<String>{
 	public void update(String object) {
 		this.isNotified = true;
 	}
+	
+	public boolean isNotified() {
+		return isNotified;
+	}
 
 }
