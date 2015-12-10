@@ -233,6 +233,14 @@ public class PluginFilter implements FilenameFilter{
 		return plugins;
 	}
 	
+	/**
+	 * Converts a file to a plugin
+	 * @param file The file to convert
+	 * @return The corresponding plugin 
+	 * @throws PluginException If it failed to convert the file to a plugin
+	 * @throws FileNotFoundException If the file is not found
+	 * @throws NullPointerException If the file parameter is null
+	 */
 	public Plugin fileToPlugin(File file) throws PluginException, FileNotFoundException, NullPointerException {
 		//DONE : Vérifier que file n'est pas null et existe
 		//DONE : Verifier que le fichier est bien converti en plugin
