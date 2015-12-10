@@ -124,7 +124,12 @@ public class PluginFinder extends Observable<List<Plugin>> implements ActionList
 		List<Plugin> pluginsFinded = null;
 		try {
 			pluginsFinded = pluginFilter.filesToPlugins(files);
-		} catch (PluginException e) {}
+		} catch (PluginException 
+				| NullPointerException 
+				| IllegalArgumentException 
+				| FileNotFoundException e) {
+			e.printStackTrace();
+		}
 		
 		notifyObservers(pluginsFinded);
 	}

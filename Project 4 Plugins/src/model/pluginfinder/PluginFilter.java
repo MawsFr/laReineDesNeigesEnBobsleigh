@@ -1,6 +1,7 @@
 package model.pluginfinder;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -33,7 +34,7 @@ public class PluginFilter implements FilenameFilter{
 			this.nonChargedPluginsList.add(name);
 			return false;
 		}
-		//TODO: Test si la class n'est pas un interface ou une Enum ou une classe abstraite
+		//TODO: Test si la class n'est pas une interface ou une Enum ou une classe abstraite
 		//TODO: test si la class est dans le package plugin
 		//TODO: Verifier que la class a bien un constructeur par défaut
 		//TODO : Verifier que la classe est une classe fille de plugins
@@ -53,8 +54,11 @@ public class PluginFilter implements FilenameFilter{
 		return nonChargedPluginsList;
 	}
 
-	public boolean hasDefaultConstructor(Class<?> theClass) {
-		//Tester que la list de class ne soit pas vide
+	public boolean hasDefaultConstructor(Class<?> theClass) throws NullPointerException {
+		if(theClass == null) {
+			throw new NullPointerException("You must specify a non null theClass parameter");
+		}
+		//DONE : Tester que la list de class ne soit pas vide
 		for(Constructor<?> constructor : theClass.getConstructors()) {
 			if(constructor.getParameterCount() == 0) {
 				return true;
@@ -64,13 +68,20 @@ public class PluginFilter implements FilenameFilter{
 		return false;
 	}
 
-	public boolean isAbstractOrInterfaceOrEnum(Class<?> theClass) {
-		//TODO : theClass non null
+	public boolean isAbstractOrInterfaceOrEnum(Class<?> theClass) throws NullPointerException {
+		//DONE : theClass non null
+		if(theClass == null) {
+			throw new NullPointerException("You must specify a non null theClass parameter");
+		}
 		return theClass.isInterface() || Modifier.isAbstract(theClass.getModifiers()) || theClass.isEnum();
 	}
 	
-	public boolean hasCorrectMethods(Class<?> theClass) {
-		//TODO : Verifier si theClass different de null
+	public boolean hasCorrectMethods(Class<?> theClass) throws NullPointerException {
+		//DONE : Verifier si theClass different de null
+		if(theClass == null) {
+			throw new NullPointerException("You must specify a non null theClass parameter");
+		}
+		
 		Method getLabelMethod = null;
 		Method transformMethod = null;
 		
@@ -89,14 +100,29 @@ public class PluginFilter implements FilenameFilter{
 		return true;
 	}
 
-	public boolean nameEndsWithClass(String fileName) {
-		//TODO : filename non null non empty
+	public boolean nameEndsWithClass(String fileName) throws NullPointerException, IllegalArgumentException {
+		//DONE : filename non null non empty
+		if(fileName == null) {
+			throw new NullPointerException("You must specify a non empty filename");
+		}
+		
+		if(fileName.isEmpty()) {
+			throw new IllegalArgumentException("You must specify a non empty filename");
+		}
 		return fileName.endsWith(".class");
 		
 	}
 	
-	public Class<?> getTheClass(String name) throws PluginException {
-		//TODO : name non null, non empty
+	public Class<?> getTheClass(String name) throws PluginException, NullPointerException, IllegalArgumentException {
+		//DONE : name non null, non empty
+		if(name == null) {
+			throw new NullPointerException("You must specify a non empty filename");
+		}
+		
+		if(name.isEmpty()) {
+			throw new IllegalArgumentException("You must specify a non empty filename");
+		}
+		
 		Class<?> theClass = null;
 		name = name.replaceFirst("\\.class", "");
 		try {
@@ -108,18 +134,31 @@ public class PluginFilter implements FilenameFilter{
 		return theClass;
 	}
 	
-	public boolean isInPluginPackage(Class<?> theClass) {
-		//TODO : test theClass non null
+	public boolean isInPluginPackage(Class<?> theClass) throws NullPointerException {
+		//DONE : test theClass non null
+		if(theClass == null) {
+			throw new NullPointerException("You must specify a non null theClass parameter");
+		}
 		return theClass.getPackage().getName().equals(PluginFinder.PLUGINS_PACKAGE);
 	}
 	
-	public boolean isSubclassOfPlugin(Class<?> theClass) {
-		//TODO : the CLass non null
+	public boolean isSubclassOfPlugin(Class<?> theClass) throws NullPointerException {
+		//DONE : the Class non null
+		if(theClass == null) {
+			throw new NullPointerException("You must specify a non null theClass parameter");
+		}
 		return Plugin.class.isAssignableFrom(theClass);
 	}
 	
-	public List<Plugin> filesToPlugins(List<File> files) throws PluginException {
-		//TODO : verifier que la list files ne sois pas null ou vide
+	public List<Plugin> filesToPlugins(List<File> files) throws PluginException, NullPointerException, IllegalArgumentException, FileNotFoundException {
+		if(files == null) {
+			throw new NullPointerException("You must specify a non null files parameters");
+		}
+		
+		if(files.isEmpty()) {
+			throw new IllegalArgumentException("You must specify a non empty files parameters");
+		}
+		//DONE : verifier que la list files ne sois pas null ou vide
 		List<Plugin> plugins = new ArrayList<Plugin>();
 		for(File file : files) {
 			plugins.add(fileToPlugin(file));
@@ -127,9 +166,16 @@ public class PluginFilter implements FilenameFilter{
 		return plugins;
 	}
 	
-	public Plugin fileToPlugin(File file) throws PluginException {
-		//TODO : Vérifier que file n'est pas null
-		//TODO : Verifier que le fichier est bien converti en plugin
+	public Plugin fileToPlugin(File file) throws PluginException, FileNotFoundException, NullPointerException {
+		//DONE : Vérifier que file n'est pas null et existe
+		//DONE : Verifier que le fichier est bien converti en plugin
+		if(file == null) {
+			throw new NullPointerException("You must specify a non null file parameters");
+		}
+		
+		if(!file.exists()) {
+			throw new FileNotFoundException("The file doesn't exists !");
+		}
 		Class<?> theClass = null;
 		Plugin theInstance = null;
 		

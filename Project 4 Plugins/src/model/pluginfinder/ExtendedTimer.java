@@ -5,42 +5,78 @@ import java.awt.event.ActionListener;
 
 import javax.swing.Timer;
 
+/**
+ * This class represents a timer which does the action of the actionListener it contains (generally a pluginFinder)
+ */
 public class ExtendedTimer implements ActionListener {
 	
+	/**
+	 * The tick interval when the action is performed
+	 */
 	protected int tickInterval;
+	
+	/**
+	 * The actionListener of this timer 
+	 */
 	protected ActionListener actionListener;
+	
+	/**
+	 * The timer 
+	 */
 	protected Timer timer;
 	
-	public ExtendedTimer(ActionListener pluginFinder) {
-		this(pluginFinder, 1000);
+	/**
+	 * Constructor with action listener
+	 * @param actionListener The action listener to perform action
+	 */
+	public ExtendedTimer(ActionListener actionListener) {
+		this(actionListener, 1000);
 	}
 	
-	public ExtendedTimer(ActionListener pluginFinder, int tickInterval) {
-		if(pluginFinder == null){
+	/**
+	 * Constructor with action listener and tick interval
+	 * @param actionListener The action listener to perform action
+	 * @param tickInterval The tick interval
+	 */
+	public ExtendedTimer(ActionListener actionListener, int tickInterval) throws NullPointerException, IllegalArgumentException {
+		if(actionListener == null){
 			throw new NullPointerException();
 		}
-		if(tickInterval <=0){
+		if(tickInterval <= 0){
 			throw new IllegalArgumentException();
 		}
-		this.actionListener = pluginFinder;
+		this.actionListener = actionListener;
 		this.tickInterval = tickInterval;
 	}
 	
+	/* (non-Javadoc)
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		actionListener.actionPerformed(e);
 	}
 	
-	public boolean isStart(){
+	/**
+	 * @return True if this timer is already started, else false
+	 */
+	public boolean isStarted(){
 		return timer != null;
 	}
 	
+	/**
+	 * @return True if this timer is stopped
+	 */
 	public boolean isStopped(){
 		return timer == null;
 	}
 	
+	/**
+	 * Starts the timer
+	 * If it is already started it stops it and starts again
+	 */
 	public void start() {
-		if(timer != null) {
+		if(isStarted()) {
 			timer.stop();
 		}
 		
@@ -48,8 +84,12 @@ public class ExtendedTimer implements ActionListener {
 		timer.start();
 	}
 	
+	/**
+	 * Stops this timer
+	 * @throws NullPointerException If it's already stopped
+	 */
 	public void stop() throws NullPointerException {
-		if(timer == null){
+		if(isStopped()){
 			throw new NullPointerException();
 		}
 		timer.stop();

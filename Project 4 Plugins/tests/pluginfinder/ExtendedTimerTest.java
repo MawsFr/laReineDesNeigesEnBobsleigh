@@ -38,7 +38,7 @@ public class ExtendedTimerTest {
 		timer = new ExtendedTimer(new PluginFinder(),20); 
 		assertTrue(timer.isStopped());
 		timer.start();
-		assertTrue(timer.isStart());
+		assertTrue(timer.isStarted());
 		timer.stop();
 		assertTrue(timer.isStopped());
 		timer.stop();
@@ -50,9 +50,9 @@ public class ExtendedTimerTest {
 		timer = new ExtendedTimer(new PluginFinder(),20);
 		assertTrue(timer.isStopped());
 		timer.start();
-		assertTrue(timer.isStart());
+		assertTrue(timer.isStarted());
 		timer.start();
-		assertTrue(timer.isStart());
+		assertTrue(timer.isStarted());
 	}
 	
 }
