@@ -122,13 +122,12 @@ public class PluginFilterTest {
 		assertEquals(0, pluginFilter.getNonLoadedPluginsList().size());
 	}
 	
-//	@Test
-//	public void fileToPluginTest() throws PluginException, URISyntaxException, FileNotFoundException {
-////		File plugin = new File("./tests/plugins/MockedPlugin.java");
-//		File plugin = new File(Thread.currentThread().getContextClassLoader().getResource("/tests/plugins/MockedPlugin.java").toURI());
-//		Plugin mockedPlugin = pluginFilter.fileToPlugin(plugin);
-//		assertNotNull(mockedPlugin);
-//	}
+	@Test
+	public void fileToPluginTest() throws PluginException, URISyntaxException, FileNotFoundException {
+		File plugin = new File(Thread.currentThread().getContextClassLoader().getResource("plugins/MockedPlugin.class").toURI());
+		Plugin mockedPlugin = pluginFilter.fileToPlugin(plugin);
+		assertNotNull(mockedPlugin);
+	}
 	
 	//Test on parameters
 	
