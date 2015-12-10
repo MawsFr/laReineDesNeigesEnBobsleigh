@@ -35,9 +35,9 @@ public class PluginFilterTest {
 
 	@Test
 	public void pluginNotInPluginPackageTest() throws PluginException {
-		assertTrue(pluginFilter.nameEndsWithClass("MockedPlugin.class"));
-		pluginFilter.accept(null, "MockedPlugin.class");
-		assertEquals("MockedPlugin.class", pluginFilter.getNonLoadedPluginsList().get(0));
+		assertTrue(pluginFilter.nameEndsWithClass("MockedPlugin2.class"));
+		pluginFilter.accept(null, "MockedPlugin2.class");
+		assertEquals("MockedPlugin2.class", pluginFilter.getNonLoadedPluginsList().get(0));
 	}
 
 	@Test
@@ -56,7 +56,7 @@ public class PluginFilterTest {
 	}
 
 	
-//	//TODO : Pour ces tests il faut un mocked plugin dans plugins
+//	//TODO : Pour ces tests il faut un mocked plugin dans plugins et avoir une autre interface Plugin
 //	@Test
 //	public void notSubclassOfPluginTest() throws PluginException {
 //		assertTrue(pluginFilter.nameEndsWithClass("MockedPlugin.class"));
@@ -67,12 +67,11 @@ public class PluginFilterTest {
 	
 //	@Test
 //	public void fileToPluginTest() throws PluginException, URISyntaxException, FileNotFoundException {
-//		File plugin = new File("./tests/mockclasses/MockedPlugin.java");
+////		File plugin = new File("./tests/plugins/MockedPlugin.java");
+//		File plugin = new File(Thread.currentThread().getContextClassLoader().getResource("/tests/plugins/MockedPlugin.java").toURI());
 //		Plugin mockedPlugin = pluginFilter.fileToPlugin(plugin);
 //		assertNotNull(mockedPlugin);
 //	}
-	
-	
 	
 	//Test on parameters
 	

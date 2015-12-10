@@ -1,4 +1,4 @@
-package mockclasses;
+package plugins;
 
 import plugins.Plugin;
 

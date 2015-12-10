@@ -2,20 +2,16 @@ package mockclasses;
 
 import plugins.Plugin;
 
-
-
-public class MockedPlugin implements Plugin {
+public class MockPlugin2 implements Plugin {
 	
 	@Override
 	public String getLabel() {
-		return "Mocked plugin";
+		return null;
 	}
-
+	
 	@Override
 	public String transform(String s) {
-		return s.replaceAll("[sS]", "$");
+		return null;
 	}
-	
-	
 
 }

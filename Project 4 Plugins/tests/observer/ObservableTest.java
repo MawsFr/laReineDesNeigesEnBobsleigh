@@ -1,8 +1,6 @@
 package observer;
 import org.junit.Test;
 
-import model.observer.Observable;
-
 /**
  * @author admin
  * @param <O>
@@ -10,11 +8,10 @@ import model.observer.Observable;
  */
 public class ObservableTest<O>{
 	
-	protected model.observer.Observable<O> observable = new Observable<>();
+	protected MockObservable observable = new MockObservable();
 
 	@Test(expected =  NullPointerException.class)
 	public void testIfTheObserverIsNullIntoAddObserver(){
-		
 		observable.addObserver(null);
 	}
 

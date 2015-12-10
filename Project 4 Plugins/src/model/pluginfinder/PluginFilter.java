@@ -22,7 +22,7 @@ public class PluginFilter implements FilenameFilter{
 	
 	@Override
 	public boolean accept(File dir, String name) {
-		//TODO: verifier que le type de fichier est bien un .class
+		//DONE : verifier que le type de fichier est bien un .class
 		if(!nameEndsWithClass(name)) {
 			return false;
 		}
