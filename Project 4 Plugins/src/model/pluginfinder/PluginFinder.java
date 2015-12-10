@@ -137,6 +137,9 @@ public class PluginFinder extends Observable<List<Plugin>> implements ActionList
 		if(files == null){
 			throw new NullPointerException();
 		}
+		if(files.isEmpty()){
+			throw new IllegalArgumentException();
+		}
 		//TODO : verifier files non null
 		List<Plugin> pluginsFinded = null;
 		try {
