@@ -8,10 +8,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.List;
 
 import model.pluginfinder.PluginFilter;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -81,7 +81,6 @@ public class PluginFilterTest {
 	}
 
 	
-	//TODO : Pour ces tests il faut un mocked plugin dans plugins et avoir une autre interface Plugin
 	@Test
 	public void notSubclassOfPluginTest() throws PluginException {
 		assertTrue(pluginFilter.nameEndsWithClass("MockClass.class"));
@@ -128,6 +127,27 @@ public class PluginFilterTest {
 		Plugin mockedPlugin = pluginFilter.fileToPlugin(plugin);
 		assertNotNull(mockedPlugin);
 	}
+	
+	@Test
+	public void filesToPluginTest() throws URISyntaxException, NullPointerException, IllegalArgumentException, FileNotFoundException, PluginException {
+		List<File> files = new ArrayList<File>();
+		files.add(new File(Thread.currentThread().getContextClassLoader().getResource("plugins/MockedPlugin.class").toURI()));
+		files.add(new File(Thread.currentThread().getContextClassLoader().getResource("plugins/MockedPlugin.class").toURI()));
+		files.add(new File(Thread.currentThread().getContextClassLoader().getResource("plugins/MockedPlugin.class").toURI()));
+		
+		List<Plugin> plugins = pluginFilter.filesToPlugins(files);
+		for(Plugin p : plugins) {
+			assertEquals(MockedPlugin.class, p.getClass());
+		}
+		assertEquals(3, plugins.size());
+		
+	}
+	
+	@Test(expected = PluginException.class)
+	public void invalidFileToPluginTest() throws PluginException, URISyntaxException, FileNotFoundException {
+		File plugin = new File(Thread.currentThread().getContextClassLoader().getResource("plugins/MockClass.class").toURI());
+		pluginFilter.fileToPlugin(plugin);
+	}	
 	
 	//Test on parameters
 	
