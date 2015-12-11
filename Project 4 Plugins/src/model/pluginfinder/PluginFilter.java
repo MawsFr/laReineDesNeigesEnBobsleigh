@@ -47,16 +47,16 @@ public class PluginFilter implements FilenameFilter{
 			this.nonChargedPluginsList.add(name);
 			return false;
 		}
-		//TODO: Test si la class n'est pas une interface ou une Enum ou une classe abstraite
-		//TODO: test si la class est dans le package plugin
-		//TODO: Verifier que la class a bien un constructeur par défaut
-		//TODO : Verifier que la classe est une classe fille de plugins
+		//DONE: Test si la class n'est pas une interface ou une Enum ou une classe abstraite
+		//DONE: test si la class est dans le package plugin
+		//DONE: Verifier que la class a bien un constructeur par défaut
+		//DONE : Verifier que la classe est une classe fille de plugins
 		if(isAbstractOrInterfaceOrEnum(theClass)
 				|| !isInPluginPackage(theClass)
 				|| !isSubclassOfPlugin(theClass)
 				|| !hasDefaultConstructor(theClass)
 				|| !hasCorrectMethods(theClass)) {
-			this.nonChargedPluginsList.add(name); //TODO : Faire des assert equals sur la size de la list des plugins invalides
+			this.nonChargedPluginsList.add(name); //DONE : Faire des assert equals sur la size de la list des plugins invalides
 			return false;
 		}
 		

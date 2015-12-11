@@ -2,8 +2,15 @@ package view;
 
 import model.pluginfinder.PluginFinder;
 
+/**
+ * The main class
+ */
 public class Main {
 
+	/**
+	 * The main function
+	 * @param args A set of arguments
+	 */
 	public static void main(String[] args) {
 		boolean testWithFrame = true; //Modify this variable to start in GUI or Console mode
 		

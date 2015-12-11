@@ -16,18 +16,54 @@ import model.observer.Observer;
 import model.pluginfinder.PluginFinder;
 import plugins.Plugin;
 
+/**
+ * The main frame when displayed in gui mode
+ */
 public class MainFrame extends JFrame implements Observer<List<Plugin>> {
 
+	/**
+	 * A singleton of the program
+	 */
 	public static MainFrame instance;
 
+	/**
+	 * serialVersionUID
+	 */
 	private static final long serialVersionUID = -2901605648414032427L;
+	
+	/**
+	 * The default width constant   
+	 */
 	public static final int WIDTH = 480;
+	
+	/**
+	 * The default height constant  
+	 */
 	public static final int HEIGHT = 680;
+	
+	/**
+	 * The plugin finder 
+	 */
 	protected PluginFinder pluginFinder;
+	
+	/**
+	 * The menu bar of this frame 
+	 */
 	protected MenuBar menuBar;
+	
+	/**
+	 * The text area  
+	 */
 	protected JTextArea editor;
+	
+	/**
+	 * The contentpane of the frame
+	 */
 	protected Container c;
 
+	/**
+	 * Default constructor
+	 */
 	private MainFrame(){
 		super("Plugin's project");
 		this.pluginFinder = new PluginFinder("dropins/plugins");
@@ -39,7 +75,10 @@ public class MainFrame extends JFrame implements Observer<List<Plugin>> {
 		this.setJMenuBar(menuBar);
 
 		this.editor = new JTextArea();
-		c.add(new JScrollPane(editor), BorderLayout.CENTER);
+		JScrollPane scrollPane = new JScrollPane(editor);
+		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		c.add(scrollPane, BorderLayout.CENTER);
 
 		this.addWindowListener(new WindowAdapter() {
 			@Override
@@ -64,14 +103,23 @@ public class MainFrame extends JFrame implements Observer<List<Plugin>> {
 
 	}
 
+	/**
+	 * @return The editor
+	 */
 	public JTextArea getEditor() {
 		return editor;
 	}
 
+	/**
+	 * @return The plugin finder
+	 */
 	public PluginFinder getPluginFinder() {
 		return pluginFinder;
 	}
 
+	/**
+	 * @return The program instance
+	 */
 	public static MainFrame getInstance() {
 		if(instance == null) {
 			instance = new MainFrame();
@@ -94,6 +142,9 @@ public class MainFrame extends JFrame implements Observer<List<Plugin>> {
 //				JOptionPane.WARNING_MESSAGE);
 //	}
 
+	/* (non-Javadoc)
+	 * @see model.observer.Observer#update(model.observer.Observable, java.lang.Object)
+	 */
 	@Override
 	public void update(Observable<List<Plugin>> source, List<Plugin> newPlugins) {
 		menuBar.removePluginsMenu();
