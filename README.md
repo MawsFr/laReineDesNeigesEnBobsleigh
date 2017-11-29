@@ -1,0 +1,1 @@
+# Application extensible par plugins
